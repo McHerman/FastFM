@@ -7,6 +7,8 @@ class Com(maxCount: Int) extends Module {
     val SCL = Input(Bool())
     val SDA = Input(Bool())
 
+    /*
+
     val VoiceFreq = Output(Vec(12, UInt(18.W)))
     val VoiceGate = Output(Vec(12, Bool()))
 
@@ -17,7 +19,9 @@ class Com(maxCount: Int) extends Module {
     val Envelopes = Output(Vec(6, Vec(5, UInt(18.W))))
 
     val Algorithm = Output(UInt(5.W))
-  })
 
+    */
+
+  })
 
 }
