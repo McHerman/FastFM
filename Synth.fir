@@ -2,20 +2,89 @@ circuit Synth :
   module Com :
     input clock : Clock
     input reset : Reset
-    output io : { flip SCL : UInt<1>, flip SDA : UInt<1>}
+    output io : { flip SCL : UInt<1>, flip SDA : UInt<1>, Mod : UInt<18>}
 
-    skip
+    reg io_Mod_r : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r <= io.SDA @[Reg.scala 16:23]
+    reg io_Mod_r_1 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_1) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_1 <= io_Mod_r @[Reg.scala 16:23]
+    reg io_Mod_r_2 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_2) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_2 <= io_Mod_r_1 @[Reg.scala 16:23]
+    reg io_Mod_r_3 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_3) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_3 <= io_Mod_r_2 @[Reg.scala 16:23]
+    reg io_Mod_r_4 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_4) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_4 <= io_Mod_r_3 @[Reg.scala 16:23]
+    reg io_Mod_r_5 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_5) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_5 <= io_Mod_r_4 @[Reg.scala 16:23]
+    reg io_Mod_r_6 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_6) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_6 <= io_Mod_r_5 @[Reg.scala 16:23]
+    reg io_Mod_r_7 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_7) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_7 <= io_Mod_r_6 @[Reg.scala 16:23]
+    reg io_Mod_r_8 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_8) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_8 <= io_Mod_r_7 @[Reg.scala 16:23]
+    reg io_Mod_r_9 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_9) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_9 <= io_Mod_r_8 @[Reg.scala 16:23]
+    reg io_Mod_r_10 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_10) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_10 <= io_Mod_r_9 @[Reg.scala 16:23]
+    reg io_Mod_r_11 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_11) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_11 <= io_Mod_r_10 @[Reg.scala 16:23]
+    reg io_Mod_r_12 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_12) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_12 <= io_Mod_r_11 @[Reg.scala 16:23]
+    reg io_Mod_r_13 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_13) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_13 <= io_Mod_r_12 @[Reg.scala 16:23]
+    reg io_Mod_r_14 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_14) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_14 <= io_Mod_r_13 @[Reg.scala 16:23]
+    reg io_Mod_r_15 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_15) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_15 <= io_Mod_r_14 @[Reg.scala 16:23]
+    reg io_Mod_r_16 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_16) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_16 <= io_Mod_r_15 @[Reg.scala 16:23]
+    reg io_Mod_r_17 : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), io_Mod_r_17) @[Reg.scala 15:16]
+    when UInt<1>("h1") : @[Reg.scala 16:19]
+      io_Mod_r_17 <= io_Mod_r_16 @[Reg.scala 16:23]
+    io.Mod <= io_Mod_r_17 @[Com.scala 29:10]
 
   module DSP :
     input clock : Clock
     input reset : Reset
-    output io : { flip Input1 : SInt<18>, flip Input2 : SInt<18>, flip Op : UInt<1>, Out : SInt<36>}
+    output io : { flip Input1 : SInt<18>, flip Input2 : SInt<18>, Out : SInt<36>}
 
-    when io.Op : @[DSP.scala 12:14]
-      node _io_Out_T = mul(io.Input1, io.Input2) @[DSP.scala 13:25]
-      io.Out <= _io_Out_T @[DSP.scala 13:12]
-    else :
-      io.Out <= asSInt(UInt<1>("h0")) @[DSP.scala 15:12]
+    node _io_Out_T = mul(io.Input1, io.Input2) @[DSP.scala 11:23]
+    io.Out <= _io_Out_T @[DSP.scala 11:10]
 
   module Voice :
     input clock : Clock
@@ -33,76 +102,42 @@ circuit Synth :
     node _T = eq(Index, UInt<19>("h40000")) @[Voice.scala 17:14]
     when _T : @[Voice.scala 17:27]
       Index <= UInt<1>("h0") @[Voice.scala 18:11]
-    reg OpCounter : UInt<3>, clock with :
-      reset => (reset, UInt<3>("h0")) @[Voice.scala 21:26]
+    reg OpCounter : UInt<1>, clock with :
+      reset => (reset, UInt<1>("h0")) @[Voice.scala 21:26]
     node _OpCounter_T = add(OpCounter, UInt<1>("h1")) @[Voice.scala 23:26]
     node _OpCounter_T_1 = tail(_OpCounter_T, 1) @[Voice.scala 23:26]
     OpCounter <= _OpCounter_T_1 @[Voice.scala 23:13]
-    node _T_1 = eq(OpCounter, UInt<3>("h5")) @[Voice.scala 25:18]
+    node _T_1 = eq(OpCounter, UInt<1>("h1")) @[Voice.scala 25:18]
     when _T_1 : @[Voice.scala 25:26]
       OpCounter <= UInt<1>("h0") @[Voice.scala 26:15]
     reg WaveReg : SInt<19>, clock with :
       reset => (reset, asSInt(UInt<19>("h0"))) @[Voice.scala 29:24]
     reg IndexReg : UInt<18>, clock with :
-      reset => (reset, UInt<18>("h0")) @[Voice.scala 31:25]
+      reset => (reset, UInt<18>("h0")) @[Voice.scala 30:25]
     reg WaveReg2 : SInt<18>, clock with :
-      reset => (reset, asSInt(UInt<18>("h0"))) @[Voice.scala 33:25]
-    io.Wave_Out <= WaveReg2 @[Voice.scala 35:15]
-    wire Input1 : SInt<18> @[Voice.scala 37:20]
-    wire Input2 : SInt<18> @[Voice.scala 38:20]
-    wire DSPOut : SInt<36> @[Voice.scala 39:20]
-    DSP.io.Input1 <= Input1 @[Voice.scala 41:17]
-    DSP.io.Input2 <= Input2 @[Voice.scala 42:17]
-    DSPOut <= DSP.io.Out @[Voice.scala 43:10]
-    Input1 <= asSInt(UInt<1>("h0")) @[Voice.scala 45:10]
-    Input2 <= asSInt(UInt<1>("h0")) @[Voice.scala 46:10]
-    DSP.io.Op <= UInt<1>("h0") @[Voice.scala 48:13]
-    node _T_2 = eq(UInt<1>("h0"), OpCounter) @[Voice.scala 50:20]
-    when _T_2 : @[Voice.scala 50:20]
-      IndexReg <= Index @[Voice.scala 52:16]
-      node _Input1_T = bits(IndexReg, 16, 0) @[Voice.scala 53:26]
-      node _Input1_T_1 = sub(_Input1_T, UInt<14>("h3fff")) @[Voice.scala 53:33]
-      node _Input1_T_2 = tail(_Input1_T_1, 1) @[Voice.scala 53:33]
-      node _Input1_T_3 = asSInt(_Input1_T_2) @[Voice.scala 53:46]
-      Input1 <= _Input1_T_3 @[Voice.scala 53:14]
-      node _Input2_T = bits(IndexReg, 16, 0) @[Voice.scala 54:26]
-      node _Input2_T_1 = sub(_Input2_T, UInt<14>("h3fff")) @[Voice.scala 54:33]
-      node _Input2_T_2 = tail(_Input2_T_1, 1) @[Voice.scala 54:33]
-      node _Input2_T_3 = asSInt(_Input2_T_2) @[Voice.scala 54:46]
-      Input2 <= _Input2_T_3 @[Voice.scala 54:14]
-      DSP.io.Op <= UInt<1>("h1") @[Voice.scala 55:17]
-    else :
-      node _T_3 = eq(UInt<1>("h1"), OpCounter) @[Voice.scala 50:20]
-      when _T_3 : @[Voice.scala 50:20]
-        DSP.io.Op <= UInt<1>("h1") @[Voice.scala 58:17]
-      else :
-        node _T_4 = eq(UInt<2>("h2"), OpCounter) @[Voice.scala 50:20]
-        when _T_4 : @[Voice.scala 50:20]
-          node _WaveReg_T = add(DSPOut, asSInt(UInt<36>("h400000000"))) @[Voice.scala 61:26]
-          node _WaveReg_T_1 = tail(_WaveReg_T, 1) @[Voice.scala 61:26]
-          node _WaveReg_T_2 = asSInt(_WaveReg_T_1) @[Voice.scala 61:26]
-          node _WaveReg_T_3 = bits(_WaveReg_T_2, 35, 17) @[Voice.scala 61:43]
-          node _WaveReg_T_4 = asSInt(_WaveReg_T_3) @[Voice.scala 61:51]
-          WaveReg <= _WaveReg_T_4 @[Voice.scala 61:15]
-          DSP.io.Op <= UInt<1>("h1") @[Voice.scala 62:17]
-        else :
-          node _T_5 = eq(UInt<2>("h3"), OpCounter) @[Voice.scala 50:20]
-          when _T_5 : @[Voice.scala 50:20]
-            Input1 <= WaveReg @[Voice.scala 65:14]
-            node _Input2_T_4 = asSInt(io.Mod) @[Voice.scala 66:24]
-            Input2 <= _Input2_T_4 @[Voice.scala 66:14]
-            DSP.io.Op <= UInt<1>("h1") @[Voice.scala 67:17]
-          else :
-            node _T_6 = eq(UInt<3>("h4"), OpCounter) @[Voice.scala 50:20]
-            when _T_6 : @[Voice.scala 50:20]
-              DSP.io.Op <= UInt<1>("h1") @[Voice.scala 70:17]
-            else :
-              node _T_7 = eq(UInt<3>("h5"), OpCounter) @[Voice.scala 50:20]
-              when _T_7 : @[Voice.scala 50:20]
-                node _WaveReg2_T = bits(DSPOut, 35, 17) @[Voice.scala 73:25]
-                node _WaveReg2_T_1 = asSInt(_WaveReg2_T) @[Voice.scala 73:33]
-                WaveReg2 <= _WaveReg2_T_1 @[Voice.scala 73:16]
-                DSP.io.Op <= UInt<1>("h1") @[Voice.scala 74:17]
+      reset => (reset, asSInt(UInt<18>("h0"))) @[Voice.scala 31:25]
+    io.Wave_Out <= WaveReg2 @[Voice.scala 33:15]
+    node _DSP_io_Input1_T = bits(OpCounter, 0, 0) @[Voice.scala 53:34]
+    node _DSP_io_Input1_T_1 = bits(IndexReg, 16, 0) @[Voice.scala 53:51]
+    node _DSP_io_Input1_T_2 = sub(_DSP_io_Input1_T_1, UInt<14>("h3fff")) @[Voice.scala 53:58]
+    node _DSP_io_Input1_T_3 = tail(_DSP_io_Input1_T_2, 1) @[Voice.scala 53:58]
+    node _DSP_io_Input1_T_4 = asSInt(_DSP_io_Input1_T_3) @[Voice.scala 53:71]
+    node _DSP_io_Input1_T_5 = mux(_DSP_io_Input1_T, _DSP_io_Input1_T_4, WaveReg) @[Voice.scala 53:23]
+    DSP.io.Input1 <= _DSP_io_Input1_T_5 @[Voice.scala 53:17]
+    node _DSP_io_Input2_T = bits(OpCounter, 0, 0) @[Voice.scala 54:34]
+    node _DSP_io_Input2_T_1 = bits(IndexReg, 16, 0) @[Voice.scala 54:51]
+    node _DSP_io_Input2_T_2 = sub(_DSP_io_Input2_T_1, UInt<14>("h3fff")) @[Voice.scala 54:58]
+    node _DSP_io_Input2_T_3 = tail(_DSP_io_Input2_T_2, 1) @[Voice.scala 54:58]
+    node _DSP_io_Input2_T_4 = asSInt(_DSP_io_Input2_T_3) @[Voice.scala 54:71]
+    node _DSP_io_Input2_T_5 = asSInt(io.Mod) @[Voice.scala 54:86]
+    node _DSP_io_Input2_T_6 = mux(_DSP_io_Input2_T, _DSP_io_Input2_T_4, _DSP_io_Input2_T_5) @[Voice.scala 54:23]
+    DSP.io.Input2 <= _DSP_io_Input2_T_6 @[Voice.scala 54:17]
+    node _WaveReg2_T = add(DSP.io.Out, asSInt(UInt<36>("h400000000"))) @[Voice.scala 56:27]
+    node _WaveReg2_T_1 = tail(_WaveReg2_T, 1) @[Voice.scala 56:27]
+    node _WaveReg2_T_2 = asSInt(_WaveReg2_T_1) @[Voice.scala 56:27]
+    node _WaveReg2_T_3 = bits(_WaveReg2_T_2, 35, 17) @[Voice.scala 56:44]
+    node _WaveReg2_T_4 = asSInt(_WaveReg2_T_3) @[Voice.scala 56:52]
+    WaveReg2 <= _WaveReg2_T_4 @[Voice.scala 56:12]
 
   module Synth :
     input clock : Clock
@@ -115,7 +150,7 @@ circuit Synth :
     inst Voice0 of Voice @[Synth.scala 14:22]
     Voice0.clock <= clock
     Voice0.reset <= reset
-    Voice0.io.Mod <= UInt<18>("h3ffff") @[Synth.scala 16:17]
+    Voice0.io.Mod <= Com.io.Mod @[Synth.scala 16:17]
     node _io_Out_T = asUInt(Voice0.io.Wave_Out) @[Synth.scala 17:32]
     io.Out <= _io_Out_T @[Synth.scala 17:10]
     Com.io.SDA <= io.SDA @[Synth.scala 19:14]

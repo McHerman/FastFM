@@ -13,7 +13,7 @@ class Synth(maxCount: Int) extends Module {
 
   val Voice0 = Module(new Voice(maxCount))
 
-  Voice0.io.Mod := "h3ffff".U
+  Voice0.io.Mod := Com.io.Mod
   io.Out := Voice0.io.Wave_Out.asUInt
 
   Com.io.SDA := io.SDA
