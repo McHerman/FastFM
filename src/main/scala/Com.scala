@@ -22,10 +22,10 @@ class Com(maxCount: Int) extends Module {
 
     */
 
-    val Mod = Output(UInt(18.W))
+    //val Mod = Output(UInt(18.W))
 
   })
 
-  io.Mod := ShiftRegister(io.SDA, 18)
+  //io.Mod := ShiftRegister(io.SDA, 18)
 
 }
