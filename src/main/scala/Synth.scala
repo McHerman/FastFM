@@ -7,6 +7,8 @@ class Synth(maxCount: Int) extends Module {
 
     val SCL = Input(Bool())
     val SDA = Input(Bool())
+
+    val WaveReg = Output(UInt(19.W))
   })
 
   val Com = Module(new Com(200000000))
@@ -15,14 +17,15 @@ class Synth(maxCount: Int) extends Module {
 
   //Voice0.io.Mod := Com.io.Mod
   Voice0.io.Mod := "h3ffff".U
-  io.Out := Voice0.io.Wave_Out.asUInt
+  io.Out := (Voice0.io.Wave_Out + "h7ffff".U.asSInt).asUInt
 
   Com.io.SDA := io.SDA
   Com.io.SCL := io.SCL
 
+  io.WaveReg := Voice0.io.WaveReg
 }
 // generate Verilog
 object Synth extends App {
-  (new chisel3.stage.ChiselStage).emitVerilog(new Synth(100000))
+  (new chisel3.stage.ChiselStage).emitVerilog(new Synth(200000000))
 }
 
