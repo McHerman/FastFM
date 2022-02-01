@@ -3,64 +3,62 @@ import chisel3.util._
 
 class Voice(maxCount: Int) extends Module {
   val io = IO(new Bundle {
-    val Wave_Out = Output(SInt(20.W))
-    val Mod = Input(UInt(18.W))
-    val WaveReg = Output(UInt(18.W))
+    val WaveOut = Output(SInt(23.W))
+    val Freq = Input(Vec(6, UInt(20.W)))
+    val Amp = Input(Vec(6, UInt(20.W)))
+    val Algorithm = Input(UInt(5.W))
   })
 
-  val DSP = Module(new DSP(maxCount))
+  val WaveReg = Vec(6, RegInit(0.S(20.W)))
 
-  val Counter = RegInit(0.U(20.W))
+  val OpCounter = RegInit(0.U(3.W))
+  val ScaleReg = RegInit(0.U(2.W))
 
-  Counter := Counter + 1.U
+  val SineGenerator = Module(new SineGenerator(200000000))
 
-  when(Counter === "hfffff".U){
-    Counter := 0.U
+  ScaleReg := ScaleReg + 1.U
+
+  when(ScaleReg === 2.U){
+    OpCounter := OpCounter + 1.U
   }
 
-  val OpCounter = RegInit(0.U(1.W))
-
-  OpCounter := OpCounter + 1.U
-
-  when(OpCounter === 1.U){
+  when(OpCounter === 6.U){
     OpCounter := 0.U
   }
-  val WaveReg = RegInit(0.U(18.W))
-  val WaveReg2 = RegInit(0.S(20.W))
-  val IndexAr = Wire(UInt(18.W))
 
-  io.Wave_Out := WaveReg2
+  val Mem = Module(new IntructionMemory(200000000))
 
-  val DSPOut = Wire(UInt(36.W))
+  Mem.io.Step := OpCounter
+  Mem.io.Algorithm := io.Algorithm
 
-  DSPOut := DSP.io.Out
+  val IndexTemp = Wire(UInt(20.W))
+  val OutputTemp = Wire(SInt(23.W))
 
-  io.WaveReg := WaveReg
-
-  when(Counter(18).asBool){
-    IndexAr := Counter(17,0)
-  }.otherwise{
-    IndexAr := "h3ffff".U - Counter(17,0)
-  }
-
-  DSP.io.Input1 := Mux(OpCounter.asBool, WaveReg, IndexAr)
-  DSP.io.Input2 := Mux(OpCounter.asBool, io.Mod, IndexAr)
-
-  WaveReg := WaveReg
-
-  when(OpCounter.asBool){
-    when(Counter(19).asBool){
-      //WaveReg2 := DSPOut(35,18).asSInt
-      //WaveReg2 := -DSPOut(35,18).zext + 262143.S
-      WaveReg2 := -DSPOut(35,17).zext
-    }.otherwise{
-      //WaveReg2 := DSPOut(35,18).asSInt
-      //WaveReg2 := DSPOut(35,18).zext - 262143.S
-      WaveReg2 := DSPOut(35,17).zext
+  for(i <- 0 until 5){
+    when(Mem.io.ReadReg(i)){
+      IndexTemp := IndexTemp + WaveReg(i)
     }
-  }.otherwise{
-    WaveReg := 262143.U - DSPOut(35,18)
   }
-}
 
+  when(IndexTemp > "hfffff".U){
+    IndexTemp - "hfffff".U
+  }
+
+  SineGenerator.io.Index := IndexTemp
+  SineGenerator.io.Amp := io.Amp(OpCounter)
+
+  when(ScaleReg === 2.U){
+    WaveReg(Mem.io.WriteReg) := SineGenerator.io.Wave_Out
+
+    when(Mem.io.IsOutput){
+      OutputTemp := OutputTemp + SineGenerator.io.Wave_Out
+    }
+  }
+
+  when(OpCounter === 5.U){
+    io.WaveOut := OutputTemp
+    OutputTemp := 0.S
+  }
+
+}
 

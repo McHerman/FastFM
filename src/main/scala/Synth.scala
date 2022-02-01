@@ -16,13 +16,11 @@ class Synth(maxCount: Int) extends Module {
   val Voice0 = Module(new Voice(maxCount))
 
   //Voice0.io.Mod := Com.io.Mod
-  Voice0.io.Mod := "h3ffff".U
-  io.Out := (Voice0.io.Wave_Out + "h7ffff".U.asSInt).asUInt
+  io.Out := (Voice0.io.WaveOut + "h7ffff".U.asSInt).asUInt
 
   Com.io.SDA := io.SDA
   Com.io.SCL := io.SCL
 
-  io.WaveReg := Voice0.io.WaveReg
 }
 // generate Verilog
 object Synth extends App {
