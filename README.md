@@ -1,9 +1,24 @@
-Chisel Project Template
+FPGA FM-Synthesizer
 =======================
 
-You've done the [Chisel Bootcamp](https://github.com/freechipsproject/chisel-bootcamp), and now you
-are ready to start your own Chisel project.  The following procedure should get you started
-with a clean running [Chisel3](https://www.chisel-lang.org/) project.
+30 Bit Chisel-based FM synthesizer.
+The overall intention with this project is to produce the most efficient FM synthesizer possible on FPGA hardware. 
+The key to this fast computation is extensive use of parallel computation. 
+The project is intended to be parametriziable so it can be implemented on a wider range of FPGA's. 
+This means that the amount of voices and operators are easilly changeable within the software. 
+The main difference between this architecture and others, is that i this framework does not use actual sine wavetables. 
+Instead it uses a second degree a polynomial approximation which does introduce slightly more harmonics but is much easier to compute at larger scales. 
+
+
+
+
+
+
+
+
+
+
+
 
 ## Make your own Chisel3 project
 
