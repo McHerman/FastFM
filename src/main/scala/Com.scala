@@ -7,6 +7,8 @@ class Com(maxCount: Int) extends Module {
     val SCL = Input(Bool())
     val SDA = Input(Bool())
 
+
+
     /*
 
     val VoiceFreq = Output(Vec(12, UInt(18.W)))

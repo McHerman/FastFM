@@ -8,18 +8,19 @@ class IntructionMemory(maxCount: Int) extends Module {
     val Step = Input(UInt(3.W))
 
     val ReadReg = Output(UInt(6.W))
-    val WriteReg = Output(UInt(6.W))
+    val WriteReg = Output(UInt(3.W))
     val IsOutput = Output(Bool())
   })
 
-  val Mem = Mem(256, UInt(10.W))
+  val Mem = SyncReadMem(256, UInt(10.W))
 
   loadMemoryFromFile(Mem, "Algorithm.txt")
 
-  val Data = Wire(0.U(UInt(10.W)))
+  val Data = Wire(UInt(10.W))
+  Data := 0.U
 
   Data := Mem((io.Algorithm << 3).asUInt + io.Step)
-  io.ReadReg := Data(0,5)
-  io.WriteReg := Data(6,8)
-  io.IsOutput := Data(9)
+  io.ReadReg := Data(5,0)
+  io.WriteReg := Data(8,6)
+  io.IsOutput := Data(9).asBool
 }

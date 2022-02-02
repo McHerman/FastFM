@@ -3,7 +3,7 @@ import chisel3.util._
 
 class SineGenerator(maxCount: Int) extends Module {
   val io = IO(new Bundle {
-    val Wave_Out = Output(SInt(20.W))
+    val WaveOut = Output(SInt(20.W))
     val Amp = Input(UInt(18.W))
     val Index = Input(UInt(20.W))
   })
@@ -22,7 +22,7 @@ class SineGenerator(maxCount: Int) extends Module {
   val WaveReg2 = RegInit(0.S(20.W))
   val IndexAr = Wire(UInt(18.W))
 
-  io.Wave_Out := WaveReg2
+  io.WaveOut := WaveReg2
 
   val DSPOut = Wire(UInt(36.W))
 

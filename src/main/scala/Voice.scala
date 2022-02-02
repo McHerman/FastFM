@@ -9,12 +9,28 @@ class Voice(maxCount: Int) extends Module {
     val Algorithm = Input(UInt(5.W))
   })
 
-  val WaveReg = Vec(6, RegInit(0.S(20.W)))
+  val WaveReg = Reg(Vec(6, SInt(20.W)))
+
+  //val WaveReg = RegInit(Vec(6, 0.S(20.W)))
 
   val OpCounter = RegInit(0.U(3.W))
   val ScaleReg = RegInit(0.U(2.W))
 
   val SineGenerator = Module(new SineGenerator(200000000))
+
+  val FreqReg = Reg(Vec(6, UInt(20.W)))
+  val IndexReg = Reg(Vec(6, UInt(20.W)))
+
+  val OutputReg = RegInit(0.S(23.W))
+
+  for(i <- 0 until 5){
+    FreqReg(i) := FreqReg(i) + 1.U
+
+    when(FreqReg(i) === io.Freq(i)){
+      FreqReg(i) := 0.U;
+      IndexReg(i) := IndexReg(i) + 1.U
+    }
+  }
 
   ScaleReg := ScaleReg + 1.U
 
@@ -31,8 +47,13 @@ class Voice(maxCount: Int) extends Module {
   Mem.io.Step := OpCounter
   Mem.io.Algorithm := io.Algorithm
 
-  val IndexTemp = Wire(UInt(20.W))
+  val IndexTemp = Wire(SInt(21.W))
   val OutputTemp = Wire(SInt(23.W))
+  val OutputTempReg = RegInit(0.S(23.W))
+
+
+  IndexTemp := 0.S
+  OutputTemp := 0.S
 
   for(i <- 0 until 5){
     when(Mem.io.ReadReg(i)){
@@ -40,25 +61,31 @@ class Voice(maxCount: Int) extends Module {
     }
   }
 
-  when(IndexTemp > "hfffff".U){
-    IndexTemp - "hfffff".U
+  when(IndexTemp > "hfffff".U.asSInt){
+    IndexTemp - "hfffff".U.asSInt
   }
 
-  SineGenerator.io.Index := IndexTemp
+  SineGenerator.io.Index := IndexTemp.asUInt
   SineGenerator.io.Amp := io.Amp(OpCounter)
 
   when(ScaleReg === 2.U){
-    WaveReg(Mem.io.WriteReg) := SineGenerator.io.Wave_Out
+    WaveReg(Mem.io.WriteReg - 1.U) := SineGenerator.io.WaveOut
 
     when(Mem.io.IsOutput){
-      OutputTemp := OutputTemp + SineGenerator.io.Wave_Out
+      OutputTemp := OutputTempReg + SineGenerator.io.WaveOut
+      OutputTempReg := OutputTemp
+    }.otherwise{
+      OutputTempReg := OutputTempReg
     }
   }
 
   when(OpCounter === 5.U){
+    OutputReg := OutputTemp
+    OutputTempReg := 0.S
     io.WaveOut := OutputTemp
-    OutputTemp := 0.S
   }
+
+  io.WaveOut := OutputReg
 
 }
 
