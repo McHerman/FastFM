@@ -7,21 +7,25 @@ class Voice(maxCount: Int) extends Module {
     val Freq = Input(Vec(6, UInt(20.W)))
     val Amp = Input(Vec(6, UInt(20.W)))
     val Algorithm = Input(UInt(5.W))
+
+    val AlgorithmTest0 = Output(UInt(6.W))
+    val AlgorithmTest1 = Output(UInt(3.W))
+    val AlgorithmTest2 = Output(UInt(1.W))
+
   })
 
+  val SineGenerator = Module(new SineGenerator(200000000))
+  val Mem = Module(new IntructionMemory(200000000))
+
   val WaveReg = Reg(Vec(6, SInt(20.W)))
-
-  //val WaveReg = RegInit(Vec(6, 0.S(20.W)))
-
   val OpCounter = RegInit(0.U(3.W))
   val ScaleReg = RegInit(0.U(2.W))
-
-  val SineGenerator = Module(new SineGenerator(200000000))
-
   val FreqReg = Reg(Vec(6, UInt(20.W)))
   val IndexReg = Reg(Vec(6, UInt(20.W)))
-
   val OutputReg = RegInit(0.S(23.W))
+  val OutputTemp = Wire(SInt(23.W))
+  val OutputTempReg = RegInit(0.S(23.W))
+  val IndexTemp = Wire(Vec(6, SInt(23.W)))
 
   for(i <- 0 until 6){
     FreqReg(i) := FreqReg(i) + 1.U
@@ -42,18 +46,10 @@ class Voice(maxCount: Int) extends Module {
     OpCounter := 0.U
   }
 
-  val Mem = Module(new IntructionMemory(200000000))
-
   Mem.io.Step := OpCounter
   Mem.io.Algorithm := io.Algorithm
 
-  //val IndexTemp = Wire(SInt(21.W))
-  val OutputTemp = Wire(SInt(23.W))
-  val OutputTempReg = RegInit(0.S(23.W))
-
   OutputTemp := 0.S
-
-  val IndexTemp = Wire(Vec(6, SInt(23.W)))
 
   for(i <- 0 until 6){
     when(Mem.io.ReadReg(i)){
@@ -92,6 +88,10 @@ class Voice(maxCount: Int) extends Module {
   }
 
   io.WaveOut := OutputReg
+
+  io.AlgorithmTest0 := Mem.io.ReadReg
+  io.AlgorithmTest1 := Mem.io.WriteReg
+  io.AlgorithmTest2 := Mem.io.IsOutput
 
 }
 

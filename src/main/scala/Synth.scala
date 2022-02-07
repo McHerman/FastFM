@@ -7,6 +7,10 @@ class Synth(maxCount: Int) extends Module {
 
     val SCL = Input(Bool())
     val SDA = Input(Bool())
+
+    val AlgorithmTest0 = Output(UInt(6.W))
+    val AlgorithmTest1 = Output(UInt(3.W))
+    val AlgorithmTest2 = Output(UInt(1.W))
   })
 
   val Com = Module(new Com(200000000))
@@ -34,6 +38,10 @@ class Synth(maxCount: Int) extends Module {
   Voice0.io.Amp(5) := "h3ffff".U
 
   Voice0.io.Algorithm := 0.U
+
+  io.AlgorithmTest0 := Voice0.io.AlgorithmTest0
+  io.AlgorithmTest1 := Voice0.io.AlgorithmTest1
+  io.AlgorithmTest2 := Voice0.io.AlgorithmTest2
 
 }
 // generate Verilog

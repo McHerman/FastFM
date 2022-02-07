@@ -200,7 +200,10 @@ endmodule
 module Voice(
   input         clock,
   input         reset,
-  output [22:0] io_WaveOut
+  output [22:0] io_WaveOut,
+  output [5:0]  io_AlgorithmTest0,
+  output [2:0]  io_AlgorithmTest1,
+  output        io_AlgorithmTest2
 );
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
@@ -214,133 +217,136 @@ module Voice(
   reg [31:0] _RAND_8;
   reg [31:0] _RAND_9;
 `endif // RANDOMIZE_REG_INIT
-  wire  SineGenerator_clock; // @[Voice.scala 19:29]
-  wire  SineGenerator_reset; // @[Voice.scala 19:29]
-  wire [19:0] SineGenerator_io_WaveOut; // @[Voice.scala 19:29]
-  wire [19:0] SineGenerator_io_Index; // @[Voice.scala 19:29]
-  wire  Mem_clock; // @[Voice.scala 45:19]
-  wire [2:0] Mem_io_Step; // @[Voice.scala 45:19]
-  wire [5:0] Mem_io_ReadReg; // @[Voice.scala 45:19]
-  wire [2:0] Mem_io_WriteReg; // @[Voice.scala 45:19]
-  wire  Mem_io_IsOutput; // @[Voice.scala 45:19]
-  reg [19:0] WaveReg_0; // @[Voice.scala 12:20]
-  reg [19:0] WaveReg_1; // @[Voice.scala 12:20]
-  reg [19:0] WaveReg_2; // @[Voice.scala 12:20]
-  reg [19:0] WaveReg_3; // @[Voice.scala 12:20]
-  reg [19:0] WaveReg_4; // @[Voice.scala 12:20]
-  reg [19:0] WaveReg_5; // @[Voice.scala 12:20]
-  reg [2:0] OpCounter; // @[Voice.scala 16:26]
-  reg [1:0] ScaleReg; // @[Voice.scala 17:25]
-  reg [22:0] OutputReg; // @[Voice.scala 24:26]
-  wire [1:0] _ScaleReg_T_1 = ScaleReg + 2'h1; // @[Voice.scala 35:24]
-  wire  _T_6 = ScaleReg == 2'h2; // @[Voice.scala 37:17]
-  wire [2:0] _OpCounter_T_1 = OpCounter + 3'h1; // @[Voice.scala 38:28]
-  reg [22:0] OutputTempReg; // @[Voice.scala 52:30]
-  wire [19:0] _GEN_14 = Mem_io_ReadReg[0] ? $signed(WaveReg_0) : $signed(20'sh0); // @[Voice.scala 59:28 61:22 67:22]
-  wire [22:0] IndexTemp_0 = {{3{_GEN_14[19]}},_GEN_14}; // @[Voice.scala 56:23]
-  wire [22:0] _GEN_44 = {{3{WaveReg_1[19]}},WaveReg_1}; // @[Voice.scala 63:40]
-  wire [22:0] _IndexTemp_1_T_2 = $signed(IndexTemp_0) + $signed(_GEN_44); // @[Voice.scala 63:40]
-  wire [22:0] IndexTemp_1 = Mem_io_ReadReg[1] ? $signed(_IndexTemp_1_T_2) : $signed(IndexTemp_0); // @[Voice.scala 59:28 63:22 69:22]
-  wire [22:0] _GEN_45 = {{3{WaveReg_2[19]}},WaveReg_2}; // @[Voice.scala 63:40]
-  wire [22:0] _IndexTemp_2_T_2 = $signed(IndexTemp_1) + $signed(_GEN_45); // @[Voice.scala 63:40]
-  wire [22:0] IndexTemp_2 = Mem_io_ReadReg[2] ? $signed(_IndexTemp_2_T_2) : $signed(IndexTemp_1); // @[Voice.scala 59:28 63:22 69:22]
-  wire [22:0] _GEN_46 = {{3{WaveReg_3[19]}},WaveReg_3}; // @[Voice.scala 63:40]
-  wire [22:0] _IndexTemp_3_T_2 = $signed(IndexTemp_2) + $signed(_GEN_46); // @[Voice.scala 63:40]
-  wire [22:0] IndexTemp_3 = Mem_io_ReadReg[3] ? $signed(_IndexTemp_3_T_2) : $signed(IndexTemp_2); // @[Voice.scala 59:28 63:22 69:22]
-  wire [22:0] _GEN_47 = {{3{WaveReg_4[19]}},WaveReg_4}; // @[Voice.scala 63:40]
-  wire [22:0] _IndexTemp_4_T_2 = $signed(IndexTemp_3) + $signed(_GEN_47); // @[Voice.scala 63:40]
-  wire [22:0] IndexTemp_4 = Mem_io_ReadReg[4] ? $signed(_IndexTemp_4_T_2) : $signed(IndexTemp_3); // @[Voice.scala 59:28 63:22 69:22]
-  wire [22:0] _GEN_48 = {{3{WaveReg_5[19]}},WaveReg_5}; // @[Voice.scala 63:40]
-  wire [22:0] _IndexTemp_5_T_2 = $signed(IndexTemp_4) + $signed(_GEN_48); // @[Voice.scala 63:40]
-  wire [22:0] _SineGenerator_io_Index_T = Mem_io_ReadReg[5] ? $signed(_IndexTemp_5_T_2) : $signed(IndexTemp_4); // @[Voice.scala 74:42]
-  wire [2:0] _T_16 = Mem_io_WriteReg - 3'h1; // @[Voice.scala 78:29]
-  wire [19:0] _WaveReg_T_16 = SineGenerator_io_WaveOut; // @[Voice.scala 78:{36,36}]
-  wire [22:0] _GEN_49 = {{3{SineGenerator_io_WaveOut[19]}},SineGenerator_io_WaveOut}; // @[Voice.scala 81:35]
-  wire [22:0] _OutputTemp_T_2 = $signed(OutputTempReg) + $signed(_GEN_49); // @[Voice.scala 81:35]
-  wire [22:0] _GEN_32 = Mem_io_IsOutput ? $signed(_OutputTemp_T_2) : $signed(23'sh0); // @[Voice.scala 54:14 80:26 81:18]
-  wire [22:0] OutputTemp = _T_6 ? $signed(_GEN_32) : $signed(23'sh0); // @[Voice.scala 54:14 77:25]
-  SineGenerator SineGenerator ( // @[Voice.scala 19:29]
+  wire  SineGenerator_clock; // @[Voice.scala 17:29]
+  wire  SineGenerator_reset; // @[Voice.scala 17:29]
+  wire [19:0] SineGenerator_io_WaveOut; // @[Voice.scala 17:29]
+  wire [19:0] SineGenerator_io_Index; // @[Voice.scala 17:29]
+  wire  Mem_clock; // @[Voice.scala 18:19]
+  wire [2:0] Mem_io_Step; // @[Voice.scala 18:19]
+  wire [5:0] Mem_io_ReadReg; // @[Voice.scala 18:19]
+  wire [2:0] Mem_io_WriteReg; // @[Voice.scala 18:19]
+  wire  Mem_io_IsOutput; // @[Voice.scala 18:19]
+  reg [19:0] WaveReg_0; // @[Voice.scala 20:20]
+  reg [19:0] WaveReg_1; // @[Voice.scala 20:20]
+  reg [19:0] WaveReg_2; // @[Voice.scala 20:20]
+  reg [19:0] WaveReg_3; // @[Voice.scala 20:20]
+  reg [19:0] WaveReg_4; // @[Voice.scala 20:20]
+  reg [19:0] WaveReg_5; // @[Voice.scala 20:20]
+  reg [2:0] OpCounter; // @[Voice.scala 21:26]
+  reg [1:0] ScaleReg; // @[Voice.scala 22:25]
+  reg [22:0] OutputReg; // @[Voice.scala 25:26]
+  reg [22:0] OutputTempReg; // @[Voice.scala 27:30]
+  wire [1:0] _ScaleReg_T_1 = ScaleReg + 2'h1; // @[Voice.scala 39:24]
+  wire  _T_6 = ScaleReg == 2'h2; // @[Voice.scala 41:17]
+  wire [2:0] _OpCounter_T_1 = OpCounter + 3'h1; // @[Voice.scala 42:28]
+  wire [19:0] _GEN_14 = Mem_io_ReadReg[0] ? $signed(WaveReg_0) : $signed(20'sh0); // @[Voice.scala 56:28 58:22 64:22]
+  wire [22:0] IndexTemp_0 = {{3{_GEN_14[19]}},_GEN_14}; // @[Voice.scala 28:23]
+  wire [22:0] _GEN_44 = {{3{WaveReg_1[19]}},WaveReg_1}; // @[Voice.scala 60:40]
+  wire [22:0] _IndexTemp_1_T_2 = $signed(IndexTemp_0) + $signed(_GEN_44); // @[Voice.scala 60:40]
+  wire [22:0] IndexTemp_1 = Mem_io_ReadReg[1] ? $signed(_IndexTemp_1_T_2) : $signed(IndexTemp_0); // @[Voice.scala 56:28 60:22 66:22]
+  wire [22:0] _GEN_45 = {{3{WaveReg_2[19]}},WaveReg_2}; // @[Voice.scala 60:40]
+  wire [22:0] _IndexTemp_2_T_2 = $signed(IndexTemp_1) + $signed(_GEN_45); // @[Voice.scala 60:40]
+  wire [22:0] IndexTemp_2 = Mem_io_ReadReg[2] ? $signed(_IndexTemp_2_T_2) : $signed(IndexTemp_1); // @[Voice.scala 56:28 60:22 66:22]
+  wire [22:0] _GEN_46 = {{3{WaveReg_3[19]}},WaveReg_3}; // @[Voice.scala 60:40]
+  wire [22:0] _IndexTemp_3_T_2 = $signed(IndexTemp_2) + $signed(_GEN_46); // @[Voice.scala 60:40]
+  wire [22:0] IndexTemp_3 = Mem_io_ReadReg[3] ? $signed(_IndexTemp_3_T_2) : $signed(IndexTemp_2); // @[Voice.scala 56:28 60:22 66:22]
+  wire [22:0] _GEN_47 = {{3{WaveReg_4[19]}},WaveReg_4}; // @[Voice.scala 60:40]
+  wire [22:0] _IndexTemp_4_T_2 = $signed(IndexTemp_3) + $signed(_GEN_47); // @[Voice.scala 60:40]
+  wire [22:0] IndexTemp_4 = Mem_io_ReadReg[4] ? $signed(_IndexTemp_4_T_2) : $signed(IndexTemp_3); // @[Voice.scala 56:28 60:22 66:22]
+  wire [22:0] _GEN_48 = {{3{WaveReg_5[19]}},WaveReg_5}; // @[Voice.scala 60:40]
+  wire [22:0] _IndexTemp_5_T_2 = $signed(IndexTemp_4) + $signed(_GEN_48); // @[Voice.scala 60:40]
+  wire [22:0] _SineGenerator_io_Index_T = Mem_io_ReadReg[5] ? $signed(_IndexTemp_5_T_2) : $signed(IndexTemp_4); // @[Voice.scala 71:42]
+  wire [2:0] _T_16 = Mem_io_WriteReg - 3'h1; // @[Voice.scala 75:29]
+  wire [19:0] _WaveReg_T_16 = SineGenerator_io_WaveOut; // @[Voice.scala 75:{36,36}]
+  wire [22:0] _GEN_49 = {{3{SineGenerator_io_WaveOut[19]}},SineGenerator_io_WaveOut}; // @[Voice.scala 78:35]
+  wire [22:0] _OutputTemp_T_2 = $signed(OutputTempReg) + $signed(_GEN_49); // @[Voice.scala 78:35]
+  wire [22:0] _GEN_32 = Mem_io_IsOutput ? $signed(_OutputTemp_T_2) : $signed(23'sh0); // @[Voice.scala 52:14 77:26 78:18]
+  wire [22:0] OutputTemp = _T_6 ? $signed(_GEN_32) : $signed(23'sh0); // @[Voice.scala 52:14 74:25]
+  SineGenerator SineGenerator ( // @[Voice.scala 17:29]
     .clock(SineGenerator_clock),
     .reset(SineGenerator_reset),
     .io_WaveOut(SineGenerator_io_WaveOut),
     .io_Index(SineGenerator_io_Index)
   );
-  IntructionMemory Mem ( // @[Voice.scala 45:19]
+  IntructionMemory Mem ( // @[Voice.scala 18:19]
     .clock(Mem_clock),
     .io_Step(Mem_io_Step),
     .io_ReadReg(Mem_io_ReadReg),
     .io_WriteReg(Mem_io_WriteReg),
     .io_IsOutput(Mem_io_IsOutput)
   );
-  assign io_WaveOut = OutputReg; // @[Voice.scala 94:14]
+  assign io_WaveOut = OutputReg; // @[Voice.scala 91:14]
+  assign io_AlgorithmTest0 = Mem_io_ReadReg; // @[Voice.scala 93:21]
+  assign io_AlgorithmTest1 = Mem_io_WriteReg; // @[Voice.scala 94:21]
+  assign io_AlgorithmTest2 = Mem_io_IsOutput; // @[Voice.scala 95:21]
   assign SineGenerator_clock = clock;
   assign SineGenerator_reset = reset;
-  assign SineGenerator_io_Index = _SineGenerator_io_Index_T[19:0]; // @[Voice.scala 74:26]
+  assign SineGenerator_io_Index = _SineGenerator_io_Index_T[19:0]; // @[Voice.scala 71:26]
   assign Mem_clock = clock;
-  assign Mem_io_Step = OpCounter; // @[Voice.scala 47:15]
+  assign Mem_io_Step = OpCounter; // @[Voice.scala 49:15]
   always @(posedge clock) begin
-    if (_T_6) begin // @[Voice.scala 77:25]
-      if (3'h0 == _T_16) begin // @[Voice.scala 78:36]
-        WaveReg_0 <= _WaveReg_T_16; // @[Voice.scala 78:36]
+    if (_T_6) begin // @[Voice.scala 74:25]
+      if (3'h0 == _T_16) begin // @[Voice.scala 75:36]
+        WaveReg_0 <= _WaveReg_T_16; // @[Voice.scala 75:36]
       end
     end
-    if (_T_6) begin // @[Voice.scala 77:25]
-      if (3'h1 == _T_16) begin // @[Voice.scala 78:36]
-        WaveReg_1 <= _WaveReg_T_16; // @[Voice.scala 78:36]
+    if (_T_6) begin // @[Voice.scala 74:25]
+      if (3'h1 == _T_16) begin // @[Voice.scala 75:36]
+        WaveReg_1 <= _WaveReg_T_16; // @[Voice.scala 75:36]
       end
     end
-    if (_T_6) begin // @[Voice.scala 77:25]
-      if (3'h2 == _T_16) begin // @[Voice.scala 78:36]
-        WaveReg_2 <= _WaveReg_T_16; // @[Voice.scala 78:36]
+    if (_T_6) begin // @[Voice.scala 74:25]
+      if (3'h2 == _T_16) begin // @[Voice.scala 75:36]
+        WaveReg_2 <= _WaveReg_T_16; // @[Voice.scala 75:36]
       end
     end
-    if (_T_6) begin // @[Voice.scala 77:25]
-      if (3'h3 == _T_16) begin // @[Voice.scala 78:36]
-        WaveReg_3 <= _WaveReg_T_16; // @[Voice.scala 78:36]
+    if (_T_6) begin // @[Voice.scala 74:25]
+      if (3'h3 == _T_16) begin // @[Voice.scala 75:36]
+        WaveReg_3 <= _WaveReg_T_16; // @[Voice.scala 75:36]
       end
     end
-    if (_T_6) begin // @[Voice.scala 77:25]
-      if (3'h4 == _T_16) begin // @[Voice.scala 78:36]
-        WaveReg_4 <= _WaveReg_T_16; // @[Voice.scala 78:36]
+    if (_T_6) begin // @[Voice.scala 74:25]
+      if (3'h4 == _T_16) begin // @[Voice.scala 75:36]
+        WaveReg_4 <= _WaveReg_T_16; // @[Voice.scala 75:36]
       end
     end
-    if (_T_6) begin // @[Voice.scala 77:25]
-      if (3'h5 == _T_16) begin // @[Voice.scala 78:36]
-        WaveReg_5 <= _WaveReg_T_16; // @[Voice.scala 78:36]
+    if (_T_6) begin // @[Voice.scala 74:25]
+      if (3'h5 == _T_16) begin // @[Voice.scala 75:36]
+        WaveReg_5 <= _WaveReg_T_16; // @[Voice.scala 75:36]
       end
     end
-    if (reset) begin // @[Voice.scala 16:26]
-      OpCounter <= 3'h0; // @[Voice.scala 16:26]
-    end else if (OpCounter == 3'h6) begin // @[Voice.scala 41:26]
-      OpCounter <= 3'h0; // @[Voice.scala 42:15]
-    end else if (ScaleReg == 2'h2) begin // @[Voice.scala 37:25]
-      OpCounter <= _OpCounter_T_1; // @[Voice.scala 38:15]
+    if (reset) begin // @[Voice.scala 21:26]
+      OpCounter <= 3'h0; // @[Voice.scala 21:26]
+    end else if (OpCounter == 3'h6) begin // @[Voice.scala 45:26]
+      OpCounter <= 3'h0; // @[Voice.scala 46:15]
+    end else if (ScaleReg == 2'h2) begin // @[Voice.scala 41:25]
+      OpCounter <= _OpCounter_T_1; // @[Voice.scala 42:15]
     end
-    if (reset) begin // @[Voice.scala 17:25]
-      ScaleReg <= 2'h0; // @[Voice.scala 17:25]
+    if (reset) begin // @[Voice.scala 22:25]
+      ScaleReg <= 2'h0; // @[Voice.scala 22:25]
     end else begin
-      ScaleReg <= _ScaleReg_T_1; // @[Voice.scala 35:12]
+      ScaleReg <= _ScaleReg_T_1; // @[Voice.scala 39:12]
     end
-    if (reset) begin // @[Voice.scala 24:26]
-      OutputReg <= 23'sh0; // @[Voice.scala 24:26]
-    end else if (OpCounter == 3'h5) begin // @[Voice.scala 88:26]
-      if (_T_6) begin // @[Voice.scala 77:25]
-        if (Mem_io_IsOutput) begin // @[Voice.scala 80:26]
-          OutputReg <= _OutputTemp_T_2; // @[Voice.scala 81:18]
+    if (reset) begin // @[Voice.scala 25:26]
+      OutputReg <= 23'sh0; // @[Voice.scala 25:26]
+    end else if (OpCounter == 3'h5) begin // @[Voice.scala 85:26]
+      if (_T_6) begin // @[Voice.scala 74:25]
+        if (Mem_io_IsOutput) begin // @[Voice.scala 77:26]
+          OutputReg <= _OutputTemp_T_2; // @[Voice.scala 78:18]
         end else begin
-          OutputReg <= 23'sh0; // @[Voice.scala 54:14]
+          OutputReg <= 23'sh0; // @[Voice.scala 52:14]
         end
       end else begin
-        OutputReg <= 23'sh0; // @[Voice.scala 54:14]
+        OutputReg <= 23'sh0; // @[Voice.scala 52:14]
       end
     end
-    if (reset) begin // @[Voice.scala 52:30]
-      OutputTempReg <= 23'sh0; // @[Voice.scala 52:30]
-    end else if (OpCounter == 3'h5) begin // @[Voice.scala 88:26]
-      OutputTempReg <= 23'sh0; // @[Voice.scala 90:19]
-    end else if (_T_6) begin // @[Voice.scala 77:25]
-      if (Mem_io_IsOutput) begin // @[Voice.scala 80:26]
-        OutputTempReg <= OutputTemp; // @[Voice.scala 82:21]
+    if (reset) begin // @[Voice.scala 27:30]
+      OutputTempReg <= 23'sh0; // @[Voice.scala 27:30]
+    end else if (OpCounter == 3'h5) begin // @[Voice.scala 85:26]
+      OutputTempReg <= 23'sh0; // @[Voice.scala 87:19]
+    end else if (_T_6) begin // @[Voice.scala 74:25]
+      if (Mem_io_IsOutput) begin // @[Voice.scala 77:26]
+        OutputTempReg <= OutputTemp; // @[Voice.scala 79:21]
       end
     end
   end
@@ -413,18 +419,30 @@ module Synth(
   input         reset,
   output [19:0] io_Out,
   input         io_SCL,
-  input         io_SDA
+  input         io_SDA,
+  output [5:0]  io_AlgorithmTest0,
+  output [2:0]  io_AlgorithmTest1,
+  output        io_AlgorithmTest2
 );
-  wire  Voice0_clock; // @[Synth.scala 14:22]
-  wire  Voice0_reset; // @[Synth.scala 14:22]
-  wire [22:0] Voice0_io_WaveOut; // @[Synth.scala 14:22]
-  wire [22:0] _io_Out_T_4 = $signed(Voice0_io_WaveOut) - 23'sh1; // @[Synth.scala 17:54]
-  Voice Voice0 ( // @[Synth.scala 14:22]
+  wire  Voice0_clock; // @[Synth.scala 18:22]
+  wire  Voice0_reset; // @[Synth.scala 18:22]
+  wire [22:0] Voice0_io_WaveOut; // @[Synth.scala 18:22]
+  wire [5:0] Voice0_io_AlgorithmTest0; // @[Synth.scala 18:22]
+  wire [2:0] Voice0_io_AlgorithmTest1; // @[Synth.scala 18:22]
+  wire  Voice0_io_AlgorithmTest2; // @[Synth.scala 18:22]
+  wire [22:0] _io_Out_T_4 = $signed(Voice0_io_WaveOut) - 23'sh1; // @[Synth.scala 21:54]
+  Voice Voice0 ( // @[Synth.scala 18:22]
     .clock(Voice0_clock),
     .reset(Voice0_reset),
-    .io_WaveOut(Voice0_io_WaveOut)
+    .io_WaveOut(Voice0_io_WaveOut),
+    .io_AlgorithmTest0(Voice0_io_AlgorithmTest0),
+    .io_AlgorithmTest1(Voice0_io_AlgorithmTest1),
+    .io_AlgorithmTest2(Voice0_io_AlgorithmTest2)
   );
-  assign io_Out = _io_Out_T_4[19:0]; // @[Synth.scala 17:10]
+  assign io_Out = _io_Out_T_4[19:0]; // @[Synth.scala 21:10]
+  assign io_AlgorithmTest0 = Voice0_io_AlgorithmTest0; // @[Synth.scala 42:21]
+  assign io_AlgorithmTest1 = Voice0_io_AlgorithmTest1; // @[Synth.scala 43:21]
+  assign io_AlgorithmTest2 = Voice0_io_AlgorithmTest2; // @[Synth.scala 44:21]
   assign Voice0_clock = clock;
   assign Voice0_reset = reset;
 endmodule
