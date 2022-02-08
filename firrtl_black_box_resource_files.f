@@ -1,1 +1,1 @@
-C:\Users\Karl\Desktop\FPGA FM_SYNTH\DSP_FPGA_SYNTH\Synth.IntructionMemory.Mem.v
+/Users/karl/Desktop/DSP_FPGA_SYNTH/Synth.IntructionMemory.Mem.v
