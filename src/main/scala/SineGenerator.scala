@@ -54,5 +54,3 @@ class SineGenerator(maxCount: Int) extends Module {
     io.OutputValid := false.B
   }
 }
-
-
