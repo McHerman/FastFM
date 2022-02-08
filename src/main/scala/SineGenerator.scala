@@ -6,6 +6,7 @@ class SineGenerator(maxCount: Int) extends Module {
     val WaveOut = Output(SInt(20.W))
     val Amp = Input(UInt(18.W))
     val Index = Input(UInt(20.W))
+    val OutputValid = Output(Bool())
   })
 
   val DSP = Module(new DSP(maxCount))
@@ -37,16 +38,20 @@ class SineGenerator(maxCount: Int) extends Module {
   DSP.io.Input1 := Mux(OpCounter.asBool, WaveReg, IndexAr)
   DSP.io.Input2 := Mux(OpCounter.asBool, io.Amp, IndexAr)
 
-  WaveReg := WaveReg
-
   when(OpCounter.asBool){
     when(io.Index(19).asBool){
+      io.WaveOut := -DSPOut(35,17).zext
       WaveReg2 := -DSPOut(35,17).zext
     }.otherwise{
+      io.WaveOut := DSPOut(35,17).zext
       WaveReg2 := DSPOut(35,17).zext
     }
+
+    io.OutputValid := true.B
   }.otherwise{
     WaveReg := 262143.U - DSPOut(35,18)
+
+    io.OutputValid := false.B
   }
 }
 

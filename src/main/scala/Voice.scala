@@ -7,25 +7,24 @@ class Voice(maxCount: Int) extends Module {
     val Freq = Input(Vec(6, UInt(20.W)))
     val Amp = Input(Vec(6, UInt(20.W)))
     val Algorithm = Input(UInt(5.W))
-
-    val AlgorithmTest0 = Output(UInt(6.W))
-    val AlgorithmTest1 = Output(UInt(3.W))
-    val AlgorithmTest2 = Output(UInt(1.W))
-
   })
 
-  val SineGenerator = Module(new SineGenerator(200000000))
-  val Mem = Module(new IntructionMemory(200000000))
-
   val WaveReg = Reg(Vec(6, SInt(20.W)))
+
   val OpCounter = RegInit(0.U(3.W))
   val ScaleReg = RegInit(0.U(2.W))
+
+  val SineGenerator = Module(new SineGenerator(200000000))
+
   val FreqReg = Reg(Vec(6, UInt(20.W)))
   val IndexReg = Reg(Vec(6, UInt(20.W)))
-  val OutputReg = RegInit(0.S(23.W))
+
   val OutputTemp = Wire(SInt(23.W))
   val OutputTempReg = RegInit(0.S(23.W))
-  val IndexTemp = Wire(Vec(6, SInt(23.W)))
+
+  val OutputReg = RegInit(0.S(23.W))
+
+  //Frequency counter
 
   for(i <- 0 until 6){
     FreqReg(i) := FreqReg(i) + 1.U
@@ -36,23 +35,36 @@ class Voice(maxCount: Int) extends Module {
     }
   }
 
+  //Opcounter logic
+
   ScaleReg := ScaleReg + 1.U
 
-  when(ScaleReg === 2.U){
-    OpCounter := OpCounter + 1.U
+  when(ScaleReg === 1.U){
+    when(OpCounter =/= 5.U){
+      OpCounter := OpCounter + 1.U
+    }.otherwise{
+      OpCounter := 0.U
+      OutputTempReg := 0.S
+      OutputReg := OutputTemp
+      io.WaveOut := OutputTemp
+    }
+    ScaleReg := 0.U
   }
 
-  when(OpCounter === 6.U){
-    OpCounter := 0.U
-  }
+  //Instruction logic
+  //Initializes instruction memory and routes signals.
+
+  val Mem = Module(new IntructionMemory(200000000))
 
   Mem.io.Step := OpCounter
   Mem.io.Algorithm := io.Algorithm
 
-  OutputTemp := 0.S
+  //Index logic
+
+  val IndexTemp = Wire(Vec(6, SInt(23.W)))
 
   for(i <- 0 until 6){
-    when(Mem.io.ReadReg(i)){
+    when(Mem.io.ReadReg(i).asBool){
       if(i == 0){
         IndexTemp(0) := WaveReg(0)
       }else{
@@ -67,31 +79,23 @@ class Voice(maxCount: Int) extends Module {
     }
   }
 
-  SineGenerator.io.Index := IndexTemp(5).asUInt
+  SineGenerator.io.Index := IndexTemp(5).asUInt + IndexReg(OpCounter)
   SineGenerator.io.Amp := io.Amp(OpCounter)
 
-  when(ScaleReg === 2.U){
+  // Output Logic
+
+  OutputTemp := 0.S
+
+  when(SineGenerator.io.OutputValid){
     WaveReg(Mem.io.WriteReg - 1.U) := SineGenerator.io.WaveOut
 
-    when(Mem.io.IsOutput){
+    when(Mem.io.IsOutput && !(OpCounter === 5.U && ScaleReg === 1.U)){
       OutputTemp := OutputTempReg + SineGenerator.io.WaveOut
       OutputTempReg := OutputTemp
-    }.otherwise{
-      OutputTempReg := OutputTempReg
     }
   }
 
-  when(OpCounter === 5.U){
-    OutputReg := OutputTemp
-    OutputTempReg := 0.S
-    io.WaveOut := OutputTemp
-  }
-
   io.WaveOut := OutputReg
-
-  io.AlgorithmTest0 := Mem.io.ReadReg
-  io.AlgorithmTest1 := Mem.io.WriteReg
-  io.AlgorithmTest2 := Mem.io.IsOutput
 
 }
 
