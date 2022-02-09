@@ -24,6 +24,8 @@ class Voice(maxCount: Int) extends Module {
 
   val OutputReg = RegInit(0.S(23.W))
 
+  val IndexTemp = Wire(SInt(23.W))
+
   //Frequency counter
 
   for(i <- 0 until 6){
@@ -61,6 +63,8 @@ class Voice(maxCount: Int) extends Module {
 
   //Index logic
 
+  /*
+
   val IndexTemp = Wire(Vec(6, SInt(23.W)))
 
   for(i <- 0 until 6){
@@ -80,6 +84,12 @@ class Voice(maxCount: Int) extends Module {
   }
 
   SineGenerator.io.Index := IndexTemp(5).asUInt + IndexReg(OpCounter)
+
+  */
+
+  SineGenerator.io.Index := IndexTemp.asUInt + IndexReg(OpCounter)
+
+  IndexTemp := Mux(Mem.io.ReadReg(0).asBool, WaveReg(0), 0.S) + Mux(Mem.io.ReadReg(1).asBool, WaveReg(1), 0.S) + Mux(Mem.io.ReadReg(2).asBool, WaveReg(2), 0.S) + Mux(Mem.io.ReadReg(3).asBool, WaveReg(3), 0.S) + Mux(Mem.io.ReadReg(4).asBool, WaveReg(4), 0.S) + Mux(Mem.io.ReadReg(5).asBool, WaveReg(5), 0.S)
   SineGenerator.io.Amp := io.Amp(OpCounter)
 
   // Output Logic
@@ -98,4 +108,3 @@ class Voice(maxCount: Int) extends Module {
   io.WaveOut := OutputReg
 
 }
-

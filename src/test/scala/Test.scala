@@ -11,7 +11,7 @@ class Test extends AnyFlatSpec with ChiselScalatestTester {
     test(new Synth(20)).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
       dut.clock.setTimeout(1000000)
 
-      for(i <- 0 until 500000){
+      for(i <- 0 until 400000){
         dut.clock.step(1)
       }
     }
