@@ -12,14 +12,18 @@ class IntructionMemory(maxCount: Int) extends Module {
     val IsOutput = Output(Bool())
   })
 
-  val Mem = SyncReadMem(256, UInt(10.W))
+  val Mem1 = Mem(256, UInt(10.W))
 
-  loadMemoryFromFile(Mem, "Algorithm.txt")
+  loadMemoryFromFile(Mem1, "Algorithm.txt")
 
   val Data = Wire(UInt(10.W))
   Data := 0.U
 
-  Data := Mem((io.Algorithm << 3).asUInt + io.Step)
+  val Address = Wire(UInt(8.W))
+  Address := (io.Algorithm << 3).asUInt + io.Step
+
+  Data := Mem1(Address)
+
   io.ReadReg := Data(5,0)
   io.WriteReg := Data(8,6)
   io.IsOutput := Data(9).asBool

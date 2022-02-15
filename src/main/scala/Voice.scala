@@ -12,6 +12,7 @@ class Voice(maxCount: Int) extends Module {
   val WaveReg = Reg(Vec(6, SInt(20.W)))
 
   val OpCounter = RegInit(0.U(3.W))
+  val opCounter2 = RegInit(0.U(3.W))
   val ScaleReg = RegInit(0.U(2.W))
 
   val SineGenerator = Module(new SineGenerator(200000000))
@@ -19,12 +20,12 @@ class Voice(maxCount: Int) extends Module {
   val FreqReg = Reg(Vec(6, UInt(20.W)))
   val IndexReg = Reg(Vec(6, UInt(20.W)))
 
-  val OutputTemp = Wire(SInt(23.W))
   val OutputTempReg = RegInit(0.S(23.W))
 
   val OutputReg = RegInit(0.S(23.W))
 
   val IndexTemp = Wire(SInt(23.W))
+  //val IndexTemp = Wire(Vec(6, SInt(23.W)))
 
   //Frequency counter
 
@@ -46,9 +47,6 @@ class Voice(maxCount: Int) extends Module {
       OpCounter := OpCounter + 1.U
     }.otherwise{
       OpCounter := 0.U
-      OutputTempReg := 0.S
-      OutputReg := OutputTemp
-      io.WaveOut := OutputTemp
     }
     ScaleReg := 0.U
   }
@@ -64,8 +62,6 @@ class Voice(maxCount: Int) extends Module {
   //Index logic
 
   /*
-
-  val IndexTemp = Wire(Vec(6, SInt(23.W)))
 
   for(i <- 0 until 6){
     when(Mem.io.ReadReg(i).asBool){
@@ -85,24 +81,59 @@ class Voice(maxCount: Int) extends Module {
 
   SineGenerator.io.Index := IndexTemp(5).asUInt + IndexReg(OpCounter)
 
+
+
   */
 
-  SineGenerator.io.Index := IndexTemp.asUInt + IndexReg(OpCounter)
-
   IndexTemp := Mux(Mem.io.ReadReg(0).asBool, WaveReg(0), 0.S) + Mux(Mem.io.ReadReg(1).asBool, WaveReg(1), 0.S) + Mux(Mem.io.ReadReg(2).asBool, WaveReg(2), 0.S) + Mux(Mem.io.ReadReg(3).asBool, WaveReg(3), 0.S) + Mux(Mem.io.ReadReg(4).asBool, WaveReg(4), 0.S) + Mux(Mem.io.ReadReg(5).asBool, WaveReg(5), 0.S)
+
+  SineGenerator.io.Index := IndexTemp.asUInt + IndexReg(OpCounter)
   SineGenerator.io.Amp := io.Amp(OpCounter)
 
   // Output Logic
 
-  OutputTemp := 0.S
-
   when(SineGenerator.io.OutputValid){
-    WaveReg(Mem.io.WriteReg - 1.U) := SineGenerator.io.WaveOut
+    //WaveReg(Mem.io.WriteReg - 1.U) := SineGenerator.io.WaveOut
+
+    switch(Mem.io.WriteReg - 1.U){
+      is(0.U){
+        WaveReg(0) := SineGenerator.io.WaveOut
+      }
+      is(1.U){
+        WaveReg(1) := SineGenerator.io.WaveOut
+      }
+      is(2.U){
+        WaveReg(2) := SineGenerator.io.WaveOut
+      }
+      is(3.U){
+        WaveReg(3) := SineGenerator.io.WaveOut
+      }
+      is(4.U){
+        WaveReg(4) := SineGenerator.io.WaveOut
+      }
+      is(5.U){
+        WaveReg(5) := SineGenerator.io.WaveOut
+      }
+    }
+
+
+    /*
 
     when(Mem.io.IsOutput && !(OpCounter === 5.U && ScaleReg === 1.U)){
       OutputTemp := OutputTempReg + SineGenerator.io.WaveOut
       OutputTempReg := OutputTemp
     }
+
+    */
+    when(Mem.io.IsOutput){
+      OutputTempReg := OutputTempReg + SineGenerator.io.WaveOut
+
+      when(OpCounter === 5.U && ScaleReg === 1.U){
+        OutputTempReg := 0.S
+        OutputReg := OutputTempReg + SineGenerator.io.WaveOut
+      }
+    }
+
   }
 
   io.WaveOut := OutputReg
