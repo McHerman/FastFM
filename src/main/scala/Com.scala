@@ -28,6 +28,13 @@ class Com(maxCount: Int) extends Module {
 
   })
 
-  //io.Mod := ShiftRegister(io.SDA, 18)
+  val Data = ShiftRegister(io.SDA, 18 ,ClockReg)
+
+  val ClockReg = RegInit(false.B(Bool()))
+
+  when(io.SCL =/= ClockReg){
+    ClockReg := io.SCL
+  }
+
 
 }
