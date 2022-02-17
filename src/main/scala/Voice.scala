@@ -27,7 +27,7 @@ class Voice(maxCount: Int) extends Module {
   val IndexTemp = Wire(SInt(23.W))
   //val IndexTemp = Wire(Vec(6, SInt(23.W)))
 
-  //Frequency counter
+  // Frequency counter
 
   for(i <- 0 until 6){
     FreqReg(i) := FreqReg(i) + 1.U
@@ -38,7 +38,7 @@ class Voice(maxCount: Int) extends Module {
     }
   }
 
-  //Opcounter logic
+  // Opcounter logic
 
   ScaleReg := ScaleReg + 1.U
 
@@ -51,15 +51,15 @@ class Voice(maxCount: Int) extends Module {
     ScaleReg := 0.U
   }
 
-  //Instruction logic
-  //Initializes instruction memory and routes signals.
+  // Instruction logic
+  // Initializes instruction memory and routes signals.
 
   val Mem = Module(new IntructionMemory(200000000))
 
   Mem.io.Step := OpCounter
   Mem.io.Algorithm := io.Algorithm
 
-  //Index logic
+  // Index logic
 
   /*
 
@@ -93,7 +93,9 @@ class Voice(maxCount: Int) extends Module {
   // Output Logic
 
   when(SineGenerator.io.OutputValid){
-    //WaveReg(Mem.io.WriteReg - 1.U) := SineGenerator.io.WaveOut
+    WaveReg(Mem.io.WriteReg - 1.U) := SineGenerator.io.WaveOut
+
+    /*
 
     switch(Mem.io.WriteReg - 1.U){
       is(0.U){
@@ -117,14 +119,8 @@ class Voice(maxCount: Int) extends Module {
     }
 
 
-    /*
-
-    when(Mem.io.IsOutput && !(OpCounter === 5.U && ScaleReg === 1.U)){
-      OutputTemp := OutputTempReg + SineGenerator.io.WaveOut
-      OutputTempReg := OutputTemp
-    }
-
     */
+
     when(Mem.io.IsOutput){
       OutputTempReg := OutputTempReg + SineGenerator.io.WaveOut
 

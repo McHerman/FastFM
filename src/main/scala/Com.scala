@@ -7,28 +7,30 @@ class Com(maxCount: Int) extends Module {
     val SCL = Input(Bool())
     val SDA = Input(Bool())
 
-
-
-    /*
-
-    val VoiceFreq = Output(Vec(12, UInt(18.W)))
-    val VoiceGate = Output(Vec(12, Bool()))
-
-    val OpAmp = Output(Vec(5, UInt(18.W)))
-
-    val OpFreq = Output(Vec(6, UInt(18.W)))
-
-    val Envelopes = Output(Vec(6, Vec(5, UInt(18.W))))
-
-    val Algorithm = Output(UInt(5.W))
-
-    */
-
-    //val Mod = Output(UInt(18.W))
-
   })
 
-  val Data = ShiftRegister(io.SDA, 18 ,ClockReg)
+  // 6 * Amp / 20-bit
+  // 6 * Freq / 20-bit
+  // 1 * Gate / 1-Bit
+  // 1 * Algorithm / 5 Bit
+
+  val OpCounter = RegInit(0.U(16.W))
+  val ScaleReg = RegInit(0.U(5.W))
+
+  // OpCounter logic
+
+  ScaleReg := ScaleReg + 1.U
+
+  when(ScaleReg === 19.U){
+    when(OpCounter =/= 19.U){ // Arbitrary width
+      OpCounter := OpCounter + 1.U
+    }.otherwise{
+      OpCounter := 0.U
+    }
+    ScaleReg := 0.U
+  }
+
+  val Data = ShiftRegister(io.SDA, 20 ,ClockReg)
 
   val ClockReg = RegInit(false.B(Bool()))
 
