@@ -1,6 +1,8 @@
 FPGA FM-Synthesizer
 =======================
 
+#### Parallel-processing FM-Symthesizer framework built in Chisel hdl  
+
 30 Bit Chisel-based FM synthesizer.
 The overall intention with this project is to produce the most efficient FM synthesizer possible on FPGA hardware. 
 The key to this fast computation is extensive use of parallel computation. 
@@ -8,14 +10,6 @@ The project is intended to be parametriziable so it can be implemented on a wide
 This means that the amount of voices and operators are easilly changeable within the software. 
 The main difference between this architecture and others, is that i this framework does not use actual sine wavetables. 
 Instead it uses a second degree a polynomial approximation which does introduce slightly more harmonics but is much easier to compute at larger scales. 
-
-
-
-
-
-
-
-
 
 
 
