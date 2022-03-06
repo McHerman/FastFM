@@ -4,20 +4,7 @@
     "emitter":"firrtl.VerilogEmitter"
   },
   {
-    "class":"firrtl.annotations.LoadMemoryAnnotation",
-    "target":"Synth.IntructionMemory.Mem",
-    "fileName":"Algorithm.txt",
-    "hexOrBinary":"h",
-    "originalMemoryNameOpt":"Mem"
-  },
-  {
     "class":"firrtl.transforms.BlackBoxTargetDirAnno",
     "targetDir":"."
-  },
-  {
-    "class":"firrtl.transforms.BlackBoxInlineAnno",
-    "target":"Synth.IntructionMemory",
-    "name":"Synth.IntructionMemory.Mem.v",
-    "text":"module BindsTo_0_IntructionMemory(\n  input        clock,\n  input  [2:0] io_Step,\n  output [5:0] io_ReadReg,\n  output [2:0] io_WriteReg,\n  output       io_IsOutput\n);\n\ninitial begin\n  $readmemh(\"Algorithm.txt\", IntructionMemory.Mem);\nend\n                      endmodule\n\nbind IntructionMemory BindsTo_0_IntructionMemory BindsTo_0_IntructionMemory_Inst(.*);"
   }
 ]

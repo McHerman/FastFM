@@ -1,7 +1,7 @@
 import chisel3._
 import chisel3.util._
 
-class SineGenerator(maxCount: Int) extends Module {
+class SineGenerator extends Module {
   val io = IO(new Bundle {
     val WaveOut = Output(SInt(20.W))
     val Amp = Input(UInt(18.W))
@@ -9,7 +9,7 @@ class SineGenerator(maxCount: Int) extends Module {
     val OutputValid = Output(Bool())
   })
 
-  val DSP = Module(new DSP(maxCount))
+  val DSP = Module(new DSP)
 
   val OpCounter = RegInit(0.U(1.W))
 

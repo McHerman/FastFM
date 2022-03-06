@@ -5,39 +5,32 @@ class Synth(maxCount: Int) extends Module {
   val io = IO(new Bundle {
     val Out = Output(UInt(20.W))
 
-    val SCL = Input(Bool())
-    val SDA = Input(Bool())
+    //val SCL = Input(Bool())
+    //val SDA = Input(Bool())
   })
 
-  val Com = Module(new Com(200000000))
+  //val Com = Module(new Com(200000000))
 
-  val Voice0 = Module(new Voice(maxCount))
+  val Voice0 = Module(new Voice)
 
   //Voice0.io.Mod := Com.io.Mod
-  io.Out := (Voice0.io.WaveOut + "h7fffff".U.asSInt).asUInt
+  io.Out := Voice0.io.WaveOut.asUInt
 
-  Com.io.SDA := io.SDA
-  Com.io.SCL := io.SCL
-
-  Voice0.io.Freq(0) := 1.U
-  Voice0.io.Freq(1) := 1.U
-  Voice0.io.Freq(2) := 1.U
-  Voice0.io.Freq(3) := 1.U
-  Voice0.io.Freq(4) := 1.U
-  Voice0.io.Freq(5) := 1.U
-
-  Voice0.io.Amp(0) := "h3ffff".U
-  Voice0.io.Amp(1) := "h3ffff".U
-  Voice0.io.Amp(2) := "h3ffff".U
-  Voice0.io.Amp(3) := "h3ffff".U
-  Voice0.io.Amp(4) := "h3ffff".U
-  Voice0.io.Amp(5) := "h3ffff".U
+  //Com.io.SDA := io.SDA
+  //Com.io.SCL := io.SCL
+  
+  for(i <- 0 until 6){
+    Voice0.io.Freq(i) := (i+1).U
+  }
+  for(i <- 0 until 6){
+    Voice0.io.Amp(i) := "hfffff".U
+  }
 
   Voice0.io.Algorithm := 1.U
 
 }
 // generate Verilog
 object Synth extends App {
-  (new chisel3.stage.ChiselStage).emitVerilog(new Synth(200000000))
+  (new chisel3.stage.ChiselStage).emitVerilog(new Synth(100000000))
 }
 
