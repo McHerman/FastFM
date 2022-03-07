@@ -50,7 +50,7 @@ class Voice extends Module {
   }
 
   // Instruction logic
-  // Initializes instruction memory and routes signals.
+  // Initializes instruction memory and routes signals
 
   val Mem = Module(new IntructionMemory)
 
