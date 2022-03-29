@@ -1,6 +1,6 @@
 ![text1118](https://user-images.githubusercontent.com/66793169/160619109-36e7f0bb-38f6-4303-b77e-12ad124961b2.png)
 
-## Parallel-processing FM-Symthesizer framework built in Chisel hdl  
+## Parallel-processing FM-Synthesizer framework built in Chisel hdl  
 
 #### Do you want FM/PM synthesis but just faster than your plain old MCU, much faster? 100 times faster? 
 
